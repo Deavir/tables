@@ -1,7 +1,12 @@
 import * as actionsTypes from '../actions/actionTypes';
+import { toColumnName, toColumnNum } from '../actions/table';
 
 const nameInitialState = {
     cells: [],
+    default: {
+        rows: 10,
+        colls: 10
+    },
     types: {
         link: {},
         money: {},
@@ -25,14 +30,19 @@ const reducer = (state = nameInitialState, action) => {
             while( collsToAdd > 0 ) {
                 newCells.push([]);
                 for (let i = 0; i < rowsQuantity; i++) {
-                    newCells[newCells.length - 1][i] = {type: null, value: '', display: '', x: newCells.length - 1, y: i};
+                    newCells[newCells.length - 1][i] = {type: i === 0 ? 'th-horizontal' : null, value: '', display: '', x: newCells.length - 1, y: i};
                 }
                 collsToAdd--;
             }
             while( rowsToAdd > 0 ){
                 const rows = newCells[0].length;
                 newCells.forEach( (col, index) => {
-                    col.push({type: null, value: '', display: '', x: rows, y: index});
+
+                    let type = null;
+                    if(index === 0) type = 'th-horizontal';
+                    if(rows === 0) type = 'th-vertical';
+
+                    col.push({type: type, value: '', display: '', x: toColumnName(rows), y: index});
                 });
                 rowsToAdd--;
             }
@@ -59,7 +69,8 @@ const reducer = (state = nameInitialState, action) => {
 
             let updatedCells = [...state.cells];
             console.log(`'${action.col}' '${action.row}' '${action.value}'`)
-            updatedCells[action.row][action.col]['value'] = action.value;
+            updatedCells[action.row][toColumnNum(action.col)]['value'] = action.value;
+            updatedCells[action.row][toColumnNum(action.col)]['type'] = action.valueType;
 
             return {
                 ...state,

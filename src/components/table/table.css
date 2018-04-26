@@ -3,3 +3,25 @@
     box-sizing: border-box;
     border: 2px solid rgb(30, 120, 255);
 }
+td {
+    border: 1px solid rgb(179, 179, 179);
+    height: 20px;
+    vertical-align: middle;
+    width: 70px;
+}
+th{
+    border: 1px solid rgb(156, 156, 156);
+    background-color: rgb(226, 226, 226);
+    padding: 0 10px;
+}
+.Offset{
+    height: 15px;
+    background-color: rgb(226, 226, 226);
+}
+table {
+    border-collapse: collapse;
+    display: block;
+    z-index: -1;
+    position: relative;
+    margin: auto;
+}

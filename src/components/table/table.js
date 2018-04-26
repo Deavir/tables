@@ -16,19 +16,22 @@ class Table extends Component {
     render() {
         return (
             <table ref={ ref => this.table = ref }>
+                <div className='Offset'></div>
                 <tbody>
                     {this.props.table.map((col, index) => (
 
                         <tr key={col[0].x + index}>
-                            {col.map((cell, index) => (
-                                <td 
+                            {col.map((cell, index) => {
+                                if (cell.type === 'th-horizontal') return <th key={cell.x + index}>{cell.x}</th>;
+                                if (cell.type === 'th-vertical') return <th key={cell.x + index}>{cell.y !== 0 && cell.y}</th>;
+                                return (<td 
                                     key={cell.x + index}
                                     data-y={cell.y}
                                     data-x={cell.x}
                                     data-value={cell.value}>
                                         {cell.value}
-                                </td>
-                            ))}
+                                </td>)
+                            })}
                         </tr>
                 
                     ))}

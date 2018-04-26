@@ -2,45 +2,18 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { drawCells } from "./store/actions/table";
 import Table from "./components/table/table";
+import ToolBar from "./components/toolBar/toolBar";
 import classes from "./App.scss";
 
 class App extends Component {
-    state = {
-        rows: 10,
-        colls: 10
-    };
     componentDidMount() {
-        this.props.drawTable(this.state.colls, this.state.rows);
-    }
-    draw() {
-        this.props.drawTable(this.state.colls, this.state.rows);
+        this.props.drawTable(this.props.colls, this.props.rows);
     }
     render() {
         console.log(this.props.table);
         return (
             <div className={classes.App}>
-                <form
-                    onSubmit={e => {
-                        e.preventDefault();
-                        this.draw();
-                    }}
-                >
-                    Colls
-                    <input
-                        value={this.state.colls}
-                        onChange={e => {
-                            this.setState({ colls: +e.target.value });
-                        }}
-                    />
-                    Rows
-                    <input
-                        value={this.state.rows}
-                        onChange={e => {
-                            this.setState({ rows: +e.target.value });
-                        }}
-                    />
-                    <button type="submit">Draw</button>
-                </form>
+                <ToolBar />
                 <Table />
             </div>
         );
@@ -55,7 +28,9 @@ const mapDispatchToProps = dispatch => {
 };
 const mapStateToProps = state => {
     return {
-        table: state.table.cells
+        table: state.table.cells,
+        colls: state.table.default.colls,
+        rows: state.table.default.rows,
     };
 };
 

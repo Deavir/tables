@@ -1,29 +1,42 @@
-import * as actionTypes from './actionTypes';
-import isURL from 'validator/lib/isUrl';
+import * as actionTypes from "./actionTypes";
+import isURL from "validator/lib/isUrl";
+
+export const CURRENCY = {
+    "$": 27,
+    "€": 30,
+    "₴": 1
+};
 
 const tellType = val => {
-    if(val.includes('=HYPERLINK')){
-        let arr = val.split('(');
-        val = arr[1]
+    const regExp = /\=([A-Z]+)\((([A-Z]+\d+)\:?)+\).*(?<!\:\))$/;
+    const match = regExp.exec(val);
+
+    if (match) {
+        if (match[1] === "SUM") {
+            return {
+                type: "function",
+                funcType: "SUM"
+            };
+        }
     }
-    if(!isNaN(val)) {
-        return 'number';
+    if (!isNaN(val)) {
+        return { type: "number" };
     }
-    if(isURL(val)){
-        return 'url'
-    }
-    return 'string';
-}
+    return { type: "string" };
+};
 
 export const toColumnName = num => {
-    for (var ret = '', a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
+    for (var ret = "", a = 1, b = 26; (num -= a) >= 0; a = b, b *= 26) {
         ret = String.fromCharCode(parseInt((num % b) / a) + 65) + ret;
     }
     return ret;
-}
+};
 
 export const toColumnNum = name => {
-    var base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', i, j, result = 0;
+    var base = "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        i,
+        j,
+        result = 0;
 
     for (i = 0, j = name.length - 1; i < name.length; i += 1, j -= 1) {
         result += Math.pow(base.length, j) * (base.indexOf(name[i]) + 1);
@@ -32,19 +45,24 @@ export const toColumnNum = name => {
     return result;
 };
 
-export const drawCells = ( rows, colls ) => ({
+export const drawCells = (rows, colls) => ({
     type: actionTypes.DRAW_CELLS,
-    colls,
-    rows
-})
-export const changeValue = ( x, y, val ) => {
-    const type = tellType(val); 
+    colls: colls + 1,
+    rows: rows + 1
+});
 
-    if (type === 'url') {
-        val = `=HYPERLINK(${val})`;
+export const changeValue = (x, y, val, type) => {
+    if (!type) type = tellType(val);
+    if (type) {
+        switch (type.currencyType) {
+            case "$":
+                type.funcValue = val * CURRENCY[type.currencyType];
+            case "€":
+                type.funcValue = val * CURRENCY[type.currencyType];
+            case "₴":
+                type.funcValue = val * CURRENCY[type.currencyType];
+        }
     }
-
-    console.log(toColumnName(x) + y);
 
     return {
         type: actionTypes.CHANGE_VALUE,
@@ -52,5 +70,14 @@ export const changeValue = ( x, y, val ) => {
         value: val,
         col: x,
         row: y
-    }
-}
+    };
+};
+export const changeActiveElement = (col, row) => {
+    const name = col + row;
+    return {
+        type: actionTypes.CHANGE_ACTIVE_ELEMENT,
+        col,
+        row,
+        name
+    };
+};

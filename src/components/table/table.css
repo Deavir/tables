@@ -7,21 +7,15 @@ td {
     border: 1px solid rgb(179, 179, 179);
     height: 20px;
     vertical-align: middle;
+    white-space: nowrap;
     width: 70px;
 }
-th{
+th {
     border: 1px solid rgb(156, 156, 156);
     background-color: rgb(226, 226, 226);
     padding: 0 10px;
 }
-.Offset{
-    height: 15px;
-    background-color: rgb(226, 226, 226);
-}
 table {
     border-collapse: collapse;
-    display: block;
-    z-index: -1;
     position: relative;
-    margin: auto;
 }

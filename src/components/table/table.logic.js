@@ -1,99 +1,53 @@
 export default class Table {
-	constructor(table, changeFunc) {
-		this.tableElement = table;
-		this.inputIsActive = false;
-		this.inputElement = document.createElement('input');
-		this.activeElement = null;
-		this.handleDblClick = this.handleDblClick.bind(this);
-		this.enterSubmit = this.enterSubmit.bind(this);
-		this.handleSelect = this.handleSelect.bind(this);
-		this.change = changeFunc;
+    constructor(table, changeFunc, changeActiveFunc) {
+        this.tableElement = table;
+        this.activeElement = null;
+        this.handleSelect = this.handleSelect.bind(this);
+        this.change = changeFunc;
+        this.changeActiveFunc = changeActiveFunc;
 
-		this.inputElement.classList.add('cell-input');
+        this.init();
+    }
 
-		this.init();
-	}
+    handleSelect(event) {
+        if (event.target.nodeName === "TD") {
+            if (this.activeElement) {
+                this.activeElement.style.backgroundColor = "#fff";
+                this.activeElement = null;
+            }
+            this.changeActiveFunc(
+                event.target.dataset.x,
+                event.target.dataset.y
+            );
+            document.getElementById("main-input").focus();
+            this.activeElement = event.target;
+            event.target.style.backgroundColor = "#f6f6f6";
+        }
+    }
 
-	enterSubmit (event) {
-		if (event.key === 'Enter') {
-			console.log('enter');
-			this.removeInput();
-		}
-	}
+    getCoords(elem) {
+        let box = elem.getBoundingClientRect();
 
-	handleDblClick(event) {
+        let body = document.body;
+        let docEl = document.documentElement;
 
-		if (event.target.nodeName === 'TD') {
-			
-			this.inputIsActive = true;
-			this.activeElement = event.target;
+        let scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+        let scrollLeft =
+            window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
 
-			const coords = this.getCoords(event.target);
+        let clientTop = docEl.clientTop || body.clientTop || 0;
+        let clientLeft = docEl.clientLeft || body.clientLeft || 0;
 
-			document.body.appendChild(this.inputElement);
+        let top = box.top + scrollTop - clientTop;
+        let left = box.left + scrollLeft - clientLeft;
 
-			this.inputElement.value = event.target.dataset.value;
+        return {
+            top: top,
+            left: left
+        };
+    }
 
-			this.inputElement.style.top = coords.top + 'px';
-			this.inputElement.style.left = coords.left + 'px';
-
-			// +1 px for table css fix
-			this.inputElement.style.height = event.target.offsetHeight + 1 + 'px';
-			this.inputElement.style.width = event.target.offsetWidth + 1 + 'px';
-
-			this.inputElement.focus();
-
-		}
-	}
-
-	removeInput(){
-		console.log(this.inputElement);
-		this.change(this.activeElement.dataset.x, this.activeElement.dataset.y, this.inputElement.value);
-		document.body.removeChild(this.inputElement);
-		this.inputIsActive = false;
-	}
-
-	handleSelect(event){
-
-		if (event.target.nodeName === 'TD') {
-
-			if (this.inputIsActive) {
-				this.removeInput();
-			};
-			if (this.activeElement) {
-				this.activeElement.style.backgroundColor = '#fff';
-				this.activeElement = null;
-			};
-			this.activeElement = event.target;
-			event.target.style.backgroundColor = '#f6f6f6';
-
-		}
-	}
-
-	getCoords(elem) {
-		let box = elem.getBoundingClientRect();
-
-		let body = document.body;
-		let docEl = document.documentElement;
-
-		let scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-		let scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-		let clientTop = docEl.clientTop || body.clientTop || 0;
-		let clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-		let top = box.top + scrollTop - clientTop;
-		let left = box.left + scrollLeft - clientLeft;
-
-		return {
-			top: top,
-			left: left
-		};
-	}
-	
-	init() {
-		this.tableElement.addEventListener('dblclick', this.handleDblClick);
-		this.inputElement.addEventListener('keyup', this.enterSubmit);
-		this.tableElement.addEventListener('click', this.handleSelect);
-	}
+    init() {
+        this.tableElement.addEventListener("click", this.handleSelect);
+    }
 }

@@ -1,22 +1,39 @@
-.ToolBar{
+.ToolBar {
     text-align: left;
-    background-color: rgb(243, 243, 243);
-    box-shadow: 0px 5px 41px -6px rgba(0,0,0,0.75);
+    background-color: #28874f;
     z-index: 10;
-    .Tools{
+    .Tools {
         padding: 20px;
         display: flex;
         flex-wrap: nowrap;
-        *{
-            color: #565656;
-        }
-        button{
+        button {
             border-radius: 4px;
-            background-color: rgb(226, 226, 226);
-            box-shadow: 0px 1px 6px -1px rgba(0,0,0,0.48);
+            background-color: #ffffff;
+            color: #565656;
+            z-index: 8;
+            box-shadow: 0px 1px 6px -1px rgba(0, 0, 0, 0.48);
             border: none;
         }
-        & > button{
+        .Money {
+            border-radius: 4px 0 0 4px;
+        }
+        .Select {
+            border-radius: 0 4px 4px 0;
+            background-color: white;
+            box-shadow: 0px 1px 6px -1px rgba(0, 0, 0, 0.48);
+            display: inline-block;
+        }
+        select {
+            font-size: 23px;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            display: block;
+            border: none;
+            height: 40px;
+            width: 60px;
+        }
+        & > button {
             font-size: 23px;
             margin-left: 10px;
             display: flex;
@@ -25,41 +42,46 @@
             height: 40px;
             width: 40px;
         }
-        form{
+        form {
             display: flex;
             font-size: 20px;
+            color: white;
             align-items: center;
             margin-left: 20px;
-            input{
+            input {
                 font-size: 23px;
                 margin-left: 10px;
+                padding-left: 10px;
+                color: #565656;
                 border-radius: 4px;
-                box-shadow: 0px 1px 6px -1px rgba(0,0,0,0.48);
+                box-shadow: 0px 1px 6px -1px rgba(0, 0, 0, 0.48);
                 border: 1px solid #a7a7a7;
                 margin-right: 10px;
                 width: 50px;
             }
-            button{
+            button {
                 font-size: 23px;
                 padding: 3px 10px;
             }
         }
     }
-    .Value{
+    .Value {
         padding: 0 20px 10px;
         display: flex;
-        span, input{
+        span,
+        input {
             padding: 10px 20px;
             background-color: white;
             color: #565656;
             font-size: 20px;
             border: 1px solid #d5d5d5;
         }
-        input{
+        input {
             width: 100%;
             border-radius: 0 4px 4px 0;
+            outline: none;
         }
-        span{
+        span {
             border-radius: 4px 0 0 4px;
         }
     }

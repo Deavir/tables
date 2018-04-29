@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import classes from "./toolBar.scss";
 import { connect } from "react-redux";
-import { drawCells, changeValue } from "../../store/actions/table";
-import { toColumnNum } from "../../store/actions/table";
+import { drawCells, changeValue, switchCurrencyMode, switchCurrencyType, switchNumberMode } from "../../store/actions/table";
+import { toColumnNum, toColumnName } from "../../store/actions/table";
 import { FaMoney, FaHashtag, FaChain } from "react-icons/lib/fa";
 
 class toolBar extends Component {
@@ -19,38 +19,49 @@ class toolBar extends Component {
             this.props.changeValue(
                 this.props.activeElement.col,
                 this.props.activeElement.row,
-                e
-                    ? e.target.value
-                    : this.props.table[this.props.activeElement.row][
-                          toColumnNum(this.props.activeElement.col)
-                      ].value,
-                type
+                e.target.value
             );
         }
     }
     render() {
+        
         let value = "";
-        let typeIsCurrency = false;
+        let selectValue = this.props.curr;
+        let buttonActive = false;
+        let numberButtonActive = false;
+        let selectDisabled = true;
+        let actCol = null;
+        let actRow = null;
 
-        if (this.props.table.length !== 0 && this.props.activeElement.col) {
-            typeIsCurrency =
-                this.props.table[this.props.activeElement.row][
-                    toColumnNum(this.props.activeElement.col)
-                ].type.type === "currency";
-            value = this.props.table[this.props.activeElement.row][
-                toColumnNum(this.props.activeElement.col)
-            ].value;
+        if(this.props.activeElement.col){
+            actCol = toColumnNum(this.props.activeElement.col);
+            actRow = this.props.activeElement.row;
+            const activeCell = this.props.table[actRow][actCol];
+            value = activeCell.value;
+
+            if (activeCell.type.type === 'currency') {
+                numberButtonActive = true;
+                selectValue = activeCell.type.currencyType;
+                selectDisabled = false;
+            }
+            if (activeCell.type.type === 'function') {
+                if (activeCell.type.funcType === 'SUM' || activeCell.type.funcType === 'AVERAGE') {
+                    selectValue = activeCell.type.currencyType;
+                    selectDisabled = false;
+                }
+            }
+            if (activeCell.type.type === 'number') {
+                buttonActive = true;
+            }
         }
         return (
             <div className={classes.ToolBar}>
                 <div className={classes.Tools}>
                     <button
                         className={classes.Money}
+                        disabled={!buttonActive}
                         onClick={() =>
-                            this.handleChange(null, {
-                                type: "currency",
-                                currencyType: this.state.currency
-                            })
+                            this.props.switchCurrencyMode(this.props.activeElement.col, actRow, value)
                         }
                     >
                         <FaMoney />
@@ -58,14 +69,10 @@ class toolBar extends Component {
                     <div className={classes.Select}>
                         <select
                             onChange={e => {
-                                if (typeIsCurrency) {
-                                    this.handleChange(null, {
-                                        type: "currency",
-                                        currencyType: e.target.value
-                                    });
-                                }
-                                this.setState({ currency: e.target.value });
+                                this.props.switchCurrencyType(this.props.activeElement.col, actRow, value, e.target.value);
                             }}
+                            value={ selectValue }
+                            disabled = { selectDisabled }
                         >
                             <option value="$">$</option>
                             <option value="€">€</option>
@@ -73,16 +80,12 @@ class toolBar extends Component {
                         </select>
                     </div>
                     <button
-                        onClick={() =>
-                            this.handleChange(null, {
-                                type: "number"
-                            })
-                        }
+                        disabled={!numberButtonActive}
+                        onClick={() => {
+                            this.props.switchNumberMode(this.props.activeElement.col, actRow, value)
+                        }}
                     >
                         <FaHashtag />
-                    </button>
-                    <button>
-                        <FaChain />
                     </button>
                     <form
                         onSubmit={e => {
@@ -114,15 +117,7 @@ class toolBar extends Component {
                         id="main-input"
                         value={value}
                         onChange={e =>
-                            this.handleChange(
-                                e,
-                                typeIsCurrency
-                                    ? {
-                                          type: "currency",
-                                          currencyType: this.state.currency
-                                      }
-                                    : null
-                            )
+                            this.handleChange(e)
                         }
                         placeholder={
                             this.props.activeElement.name === "Cell"
@@ -139,7 +134,8 @@ class toolBar extends Component {
 const mapStateToProps = state => {
     return {
         table: state.table.cells,
-        activeElement: state.table.activeCell
+        activeElement: state.table.activeCell,
+        curr: state.table.currentCurrency
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -147,8 +143,20 @@ const mapDispatchToProps = dispatch => {
         drawTable: (colls, rows) => {
             dispatch(drawCells(colls, rows));
         },
-        changeValue: (col, row, val, type) => {
-            dispatch(changeValue(col, row, val, type));
+        changeValue: (col, row, val) => {
+            dispatch(changeValue(col, row, val));
+        },
+        switchCurrencyMode: (col, row, val) => {
+            dispatch(switchCurrencyMode());
+            dispatch(changeValue(col, row, val));
+        },
+        switchNumberMode: (col, row, val) => {
+            dispatch(switchNumberMode());
+            dispatch(changeValue(col, row, val));
+        },
+        switchCurrencyType: (col, row, val, type) => {
+            dispatch(switchCurrencyType(type));
+            dispatch(changeValue(col, row, val));
         }
     };
 };

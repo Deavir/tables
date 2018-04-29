@@ -38,6 +38,7 @@ class Table extends Component {
                                     <td
                                         key={cell.x + index}
                                         data-y={cell.y}
+                                        data-type={cell.type.funcType}
                                         data-x={cell.x}
                                         data-value={cell.value}
                                     >

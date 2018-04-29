@@ -19,3 +19,32 @@ table {
     border-collapse: collapse;
     position: relative;
 }
+iframe{
+    height: 200px;
+    width: 250px;
+    position: fixed;
+    border: none;
+    transform: scale(0.25);
+    box-shadow: 1px 21px 114px 22px rgba(0,0,0,0.75);
+    background-color: rgb(230, 230, 230);
+    border-radius: 20px;
+    width: 1000px;
+    height: 800px;
+    top: -280px;
+    right: -350px;
+}
+.error{
+    padding: 20px;
+    position: fixed;
+    border-radius: 5px;
+    animation: myMove .2s ease-in-out;
+    font-size: 35px;
+    background-color: rgb(233, 233, 233);
+    box-shadow: 0px 10px 50px -7px rgba(0,0,0,0.75);
+    top: 20px;
+    right: 20px;
+}
+@keyframes myMove {
+    from {right: -100%;}
+    to {right: 20px;}
+}

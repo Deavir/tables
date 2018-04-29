@@ -1,5 +1,5 @@
 import * as actionsTypes from "../actions/actionTypes";
-import { toColumnName, toColumnNum, CURRENCY } from "../actions/table";
+import { toColumnName, toColumnNum, CURRENCY, sliceProps, toCurrency } from "../utilities";
 import isURL from "validator/lib/isUrl";
 
 const nameInitialState = {
@@ -14,32 +14,6 @@ const nameInitialState = {
         rows: 10,
         colls: 10
     }
-};
-
-const sliceProps = val => {
-    const propRegExp = /(([A-Z]+)(\d+))/;
-    let props = val.split("(")[1];
-    props = props.split("");
-    props.pop();
-    props = props.join("");
-    props = props.split(":");
-
-    return props.map(prop => {
-        const propMatch = propRegExp.exec(prop);
-        return {
-            col: propMatch[2],
-            row: propMatch[3]
-        };
-    });
-};
-
-const toCurrency = (number, type) => {
-    number = number.toFixed(2).replace(/./g, function(c, i, a) {
-        return i && c !== "." && (a.length - i) % 3 === 0 ? " " + c : c;
-    });
-    number = type + number;
-    number = number.replace(".", ",");
-    return number ? number : 'error';
 };
 
 const reducer = (state = nameInitialState, action) => {

@@ -3,7 +3,7 @@ import classes from "./toolBar.scss";
 import axios from 'axios'; 
 import { connect } from "react-redux";
 import { drawCells, changeValue, switchCurrencyMode, switchCurrencyType, switchNumberMode } from "../../store/actions/table";
-import { toColumnNum, toColumnName } from "../../store/actions/table";
+import { toColumnNum, toColumnName } from "../../store/utilities";
 import { FaMoney, FaHashtag, FaChain } from "react-icons/lib/fa";
 
 class toolBar extends Component {
@@ -58,7 +58,7 @@ class toolBar extends Component {
                     selectValue = activeCell.type.currencyType;
                     selectDisabled = false;
                 }
-                if (activeCell.type.funcType === 'HYPERLINK' && !this.isLink || this.prevLink !== activeCell.type.link){
+                if (activeCell.type.funcType === 'HYPERLINK' && ( !this.isLink || this.prevLink !== activeCell.type.link )){
                     this.isLink = true;
                     this.prevLink = activeCell.type.link;
                     axios.get(activeCell.type.link)

@@ -1,5 +1,3 @@
-
-
 export default class Table {
     constructor(table, changeFunc, changeActiveFunc) {
         this.tableElement = table;

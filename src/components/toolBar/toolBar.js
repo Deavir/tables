@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import classes from "./toolBar.scss";
+import axios from 'axios'; 
 import { connect } from "react-redux";
 import { drawCells, changeValue, switchCurrencyMode, switchCurrencyType, switchNumberMode } from "../../store/actions/table";
 import { toColumnNum, toColumnName } from "../../store/actions/table";
@@ -9,12 +10,14 @@ class toolBar extends Component {
     state = {
         rows: 10,
         colls: 10,
-        currency: "$"
+        currency: "$",
+        linkIsActive: true,
+        link: null
     };
     draw() {
         this.props.drawTable(this.state.colls, this.state.rows);
     }
-    handleChange(e, type) {
+    handleChange(e) {
         if (this.props.activeElement.name !== "Cell") {
             this.props.changeValue(
                 this.props.activeElement.col,
@@ -23,6 +26,10 @@ class toolBar extends Component {
             );
         }
     }
+
+    isLink = false;
+    prevLink = null;
+
     render() {
         
         let value = "";
@@ -30,6 +37,7 @@ class toolBar extends Component {
         let buttonActive = false;
         let numberButtonActive = false;
         let selectDisabled = true;
+        let link = null;
         let actCol = null;
         let actRow = null;
 
@@ -45,16 +53,36 @@ class toolBar extends Component {
                 selectDisabled = false;
             }
             if (activeCell.type.type === 'function') {
+
                 if (activeCell.type.funcType === 'SUM' || activeCell.type.funcType === 'AVERAGE') {
                     selectValue = activeCell.type.currencyType;
                     selectDisabled = false;
                 }
+                if (activeCell.type.funcType === 'HYPERLINK' && !this.isLink || this.prevLink !== activeCell.type.link){
+                    this.isLink = true;
+                    this.prevLink = activeCell.type.link;
+                    axios.get(activeCell.type.link)
+                        .then(() => {
+                            this.setState({linkIsActive: true, link: activeCell.type.link});
+                        })
+                        .catch(() => {
+                            this.setState({linkIsActive: false});
+                        })
+                }
+            } else {
+                this.isLink = false;
             }
             if (activeCell.type.type === 'number') {
                 buttonActive = true;
             }
+            console.log(this.isLink);
         }
         return (
+            <main>
+            {
+                this.isLink === false ? null :
+                this.state.linkIsActive ? <iframe src={this.state.link} /> : <div id="error">Failed to load the page</div> 
+            }
             <div className={classes.ToolBar}>
                 <div className={classes.Tools}>
                     <button
@@ -127,6 +155,7 @@ class toolBar extends Component {
                     />
                 </div>
             </div>
+            </main>
         );
     }
 }

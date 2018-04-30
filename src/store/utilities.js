@@ -51,7 +51,7 @@ export const tellType = val => {
     });
 };
 
-//Transforms string like "=FUNCTION(A1:A2)" into object with col and row property.
+//Transforms string like "=FUNCTION(A1:A2)" into array with col and row property for each cell name.
 export const sliceProps = val => {
     const propRegExp = /(([A-Z]+)(\d+))/;
     let props = val.split("(")[1];

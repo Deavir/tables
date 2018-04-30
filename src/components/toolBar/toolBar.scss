@@ -2,6 +2,10 @@
     text-align: left;
     background-color: #28874f;
     z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     .Tools {
         padding: 20px;
         display: flex;
@@ -47,7 +51,7 @@
         }
         form {
             display: flex;
-            font-size: 20px;
+            font-size: 15px;
             color: white;
             align-items: center;
             margin-left: 20px;

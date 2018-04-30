@@ -13,7 +13,6 @@ class Table extends Component {
     componentDidMount() {
         this.tableClickHandler = new TableClickHandler(
             this.table,
-            this.props.changeValue,
             this.props.changeActiveEl
         );
     }
@@ -24,16 +23,19 @@ class Table extends Component {
                     {this.props.table.map((col, index) => (
                         <tr key={col[0].x + index}>
                             {col.map((cell, index) => {
-                                if (cell.type === "th-horizontal")
-                                    return (
-                                        <th key={cell.x + index}>{cell.x}</th>
-                                    );
-                                if (cell.type === "th-vertical")
+
+                                if (cell.type === "th-horizontal") {
+                                    return <th key={cell.x + index}>{cell.x}</th>;
+                                }
+                                    
+                                if (cell.type === "th-vertical") {
                                     return (
                                         <th key={cell.x + index}>
                                             {cell.y !== 0 && cell.y}
                                         </th>
                                     );
+                                }
+
                                 return (
                                     <td
                                         key={cell.x + index}
@@ -51,7 +53,6 @@ class Table extends Component {
                 </tbody>
             </table>
         );
-        ("");
     }
 }
 
@@ -62,9 +63,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        changeValue: (x, y, value) => {
-            dispatch(changeValue(x, y, value));
-        },
         changeActiveEl: (x, y) => {
             dispatch(changeActiveElement(x, y));
         }

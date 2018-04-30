@@ -1,9 +1,8 @@
 export default class Table {
-    constructor(table, changeFunc, changeActiveFunc) {
+    constructor(table, changeActiveFunc) {
         this.tableElement = table;
         this.activeElement = null;
         this.handleSelect = this.handleSelect.bind(this);
-        this.change = changeFunc;
         this.changeActiveFunc = changeActiveFunc;
 
         this.init();

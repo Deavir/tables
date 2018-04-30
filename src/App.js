@@ -6,11 +6,12 @@ import ToolBar from "./components/toolBar/toolBar";
 import classes from "./App.scss";
 
 class App extends Component {
+
     componentDidMount() {
         this.props.drawTable(this.props.colls, this.props.rows);
     }
+
     render() {
-        console.log(this.props.table);
         return (
             <div className={classes.App}>
                 <ToolBar />
@@ -19,6 +20,7 @@ class App extends Component {
         );
     }
 }
+
 const mapDispatchToProps = dispatch => {
     return {
         drawTable: (colls, rows) => {

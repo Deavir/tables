@@ -18,10 +18,12 @@ th {
 table {
     border-collapse: collapse;
     position: relative;
+    margin-top: 135px;
 }
 iframe{
     height: 200px;
     z-index: 100;
+    pointer-events: none;
     width: 250px;
     position: fixed;
     border: none;

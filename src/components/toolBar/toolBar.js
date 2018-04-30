@@ -14,9 +14,11 @@ class toolBar extends Component {
         linkIsActive: true,
         link: null
     };
+
     draw() {
         this.props.drawTable(this.state.colls, this.state.rows);
     }
+
     handleChange(e) {
         if (this.props.activeElement.name !== "Cell") {
             this.props.changeValue(
@@ -32,6 +34,7 @@ class toolBar extends Component {
 
     render() {
         
+        let activeCell = null;
         let value = "";
         let selectValue = this.props.curr;
         let buttonActive = false;
@@ -41,10 +44,10 @@ class toolBar extends Component {
         let actCol = null;
         let actRow = null;
 
-        if(this.props.activeElement.col){
+        if (this.props.activeElement.col) {
             actCol = toColumnNum(this.props.activeElement.col);
             actRow = this.props.activeElement.row;
-            const activeCell = this.props.table[actRow][actCol];
+            activeCell = this.props.table[actRow][actCol];
             value = activeCell.value;
 
             if (activeCell.type.type === 'currency') {
@@ -52,6 +55,7 @@ class toolBar extends Component {
                 selectValue = activeCell.type.currencyType;
                 selectDisabled = false;
             }
+
             if (activeCell.type.type === 'function') {
 
                 if (activeCell.type.funcType === 'SUM' || activeCell.type.funcType === 'AVERAGE') {
@@ -62,20 +66,15 @@ class toolBar extends Component {
                     this.isLink = true;
                     this.prevLink = activeCell.type.link;
                     axios.get(activeCell.type.link)
-                        .then(() => {
-                            this.setState({linkIsActive: true, link: activeCell.type.link});
-                        })
-                        .catch(() => {
-                            this.setState({linkIsActive: false});
-                        })
+                    .then(() => { this.setState({linkIsActive: true, link: activeCell.type.link}) })
+                    .catch(() => { this.setState({linkIsActive: false}) })
                 }
-            } else {
-                this.isLink = false;
-            }
+
+            } else this.isLink = false;
+
             if (activeCell.type.type === 'number') {
                 buttonActive = true;
             }
-            console.log(this.isLink);
         }
         return (
             <main>
@@ -135,7 +134,7 @@ class toolBar extends Component {
                                 this.setState({ rows: +e.target.value });
                             }}
                         />
-                        <button type="submit">Update</button>
+                        <button type="submit">Resize</button>
                     </form>
                 </div>
                 <div className={classes.Value}>

@@ -40,6 +40,7 @@ iframe{
     padding: 20px;
     position: fixed;
     border-radius: 5px;
+    z-index: 54;
     animation: myMove .2s ease-in-out;
     font-size: 35px;
     background-color: rgb(233, 233, 233);

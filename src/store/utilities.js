@@ -25,7 +25,7 @@ export const toColumnNum = name => {
 //Defines type using value
 export const tellType = val => {
 
-    const regExp = /\=([A-Z]+)\((([A-Z]+\d+)\:?)+\).*(?<!\:\))$/;
+    const regExp = /\=([A-Z]+)\((([A-Z]+\d+)\:?)+\)/;
     const linkRegExp = /\=HYPERLINK\((.+)\)/;
 
     const match = regExp.exec(val);
@@ -59,6 +59,12 @@ export const sliceProps = val => {
     props.pop();
     props = props.join("");
     props = props.split(":");
+
+    props.map((prop, index) => {
+        if(prop === ""){
+            props.splice(index, 1);
+        }
+    })
 
     return props.map(prop => {
         const propMatch = propRegExp.exec(prop);

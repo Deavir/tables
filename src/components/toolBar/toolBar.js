@@ -11,7 +11,7 @@ class toolBar extends Component {
         rows: 10,
         colls: 10,
         currency: "$",
-        linkIsActive: true,
+        linkIsActive: false,
         link: null
     };
 
@@ -70,7 +70,9 @@ class toolBar extends Component {
                     .catch(() => { this.setState({linkIsActive: false}) })
                 }
 
-            } else this.isLink = false;
+            } else {
+                this.isLink = false;
+            }
 
             if (activeCell.type.type === 'number') {
                 buttonActive = true;

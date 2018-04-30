@@ -1,15 +1,18 @@
 {
     "presets": [
-        ["es2017"],
-        [
-            "env",
-            {
-                "targets": {
-                    "browsers": ["> 1%", "last 2 versions"]
-                }
+        ["env", {
+            "targets": {
+                "browsers": [
+                    "> 1%",
+                    "last 2 versions"
+                ]
             }
-        ],
-        "react",
-        ["stage-0"]
+        }],
+        "stage-2",
+        "react"
+    ],
+    "plugins": [
+        "syntax-dynamic-import",
+        ["transform-modern-regexp"]
     ]
 }

@@ -165,6 +165,8 @@ const changeValue = (state, action) => {
 
             const props = sliceProps(newCells[row][col].value);
 
+            console.log(props);
+
             let sum = props.reduce((sum, prop) => {
                 addRef(prop.row, prop.col, row, col);
                 return sum + +takeValue(prop.row, prop.col);

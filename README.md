@@ -2,7 +2,7 @@
 
 # Tables
 
-You can use functions such as SUM, AERAGE, CONCAT and HYPERLINK.
+You can use functions such as SUM, AVERAGE, CONCAT and HYPERLINK.
 
 ## SUM
 

@@ -23,13 +23,6 @@ Allowed types: number and currency.
 Cell with value =CONCAT(A1:A2:...) will display concatenated string of cells from the parameters.
 Allowed types: any type.
 
-!Function will display error if parameters have different types!
-
-## CONCAT
-
-Cell with value =CONCAT(A1:A2:...) will display concatenated string of cells from the parameters.
-Allowed types: any type.
-
 
 ## HYPERLINK
 

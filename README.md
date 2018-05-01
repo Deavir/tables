@@ -1,3 +1,5 @@
+![alt text](https://preview.ibb.co/ipK0b7/Screen_Shot_2018_05_01_at_12_51_08_PM.png)
+
 # Tables
 
 You can use functions such as SUM, AERAGE, CONCAT and HYPERLINK.
